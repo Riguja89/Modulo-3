@@ -4,7 +4,14 @@
   "description": "",
   "author": "",
   "license": "ISC",
+  "scripts": {
+    "start": "nodemon showByName/app.js",
+    "start2": "nodemon Beatles/app.js"
+  },
   "dependencies": {
-    "request": "^2.88.2"
+    "nodemon": "^2.0.19",
+    "request": "^2.88.2",
+    "async": "^3.2.3",
+    "bluebird": "^3.7.2"
   }
 }

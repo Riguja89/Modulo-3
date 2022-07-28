@@ -140,16 +140,24 @@ function problemC () {
 
   // promise version
   // ???
-  var promesas = [];  
-  filenames.forEach(filename=>{
-   promesas.push(promisifiedReadFile(filename)
-  .then(function successHandler(result) {                                                                                     10
-    return promisifiedReadFile(filename);
-  }))});
-  
-    Promise.all(promesas).then((res)=>{res.map(r=>blue(r));
-      console.log('-- C. callback version done --');})
 
+  // var promesas = [];  
+  // filenames.forEach(filename=>{
+  //  promesas.push(promisifiedReadFile(filename)
+  // .then(function successHandler(result) {                                                                                     10
+  //   return promisifiedReadFile(filename);
+  // }))});
+  
+  //   Promise.all(promesas).then((res)=>{res.map(r=>blue(r));
+  //     console.log('-- C. callback version done --');})
+  
+
+      // otra solucion con Promise.each
+
+    Promise.each(filenames, function(file){
+      return promisifiedReadFile(file).then(stanza=>blue(stanza))
+    })
+    .then(()=>console.log('-- C. callback version done --'))
 
 }
 

@@ -22,3 +22,39 @@ var beatles=[{
   profilePic:"http://cp91279.biography.com/BIO_Bio-Shorts_0_Ringo-Starr_SF_HD_768x432-16x9.jpg"
 }
 ]
+
+
+
+http.createServer( function(req, res){ 
+
+  //console.log(beatles[0].name);
+
+  if( req.url === '/api'){
+	res.writeHead(200, { 'Content-Type':'application/json' }) //Vamos a devolver texto en formato JSON
+	res.end( JSON.stringify(beatles) ); //Antes de enviar el objeto, debemos parsearlo y transformarlo a un string JSON
+  }else if(req.url.split('/')[1]=='api'&&beatles.find(e=>{return e.name===req.url.split('/')[2].split('%20').join(' ')})!=undefined){
+   
+    res.writeHead(200, { 'Content-Type':'application/json' }) //Vamos a devolver texto en formato JSON
+    res.end( JSON.stringify(beatles.find(e=>{return e.name===req.url.split('/')[2].split('%20').join(' ')})) ); 
+  }else if( req.url === '/'){ //Si la URL es / devolvemos el HTML
+
+		res.writeHead(200, { 'Content-Type':'text/html' })
+		var html = fs.readFileSync(__dirname +'/index.html');
+		res.end(html);
+  }else if( beatles.find(e=>{return e.name===req.url.split('/')[1].split('%20').join(' ')})){ //Si la URL es / devolvemos el HTML
+    let beatle = beatles.find(e=>{return e.name===req.url.split('/')[1].split('%20').join(' ')});
+		res.writeHead(200, { 'Content-Type':'text/html' })
+		var html = fs.readFileSync(__dirname +'/beatle.html','utf8');
+    var nombre = beatle.name; //Esta es la variable con la que vamos a reemplazar el template
+    var birthdate = beatle.birthdate; //Esta es la variable con la que vamos a reemplazar el template
+    var profilePic=beatle.profilePic;
+	  html = html.replace('{nombre}', nombre); // Usamos el método replace es del objeto String
+    html = html.replace('{birthdate}', birthdate); 
+    html = html.replace('{urlimage}', profilePic); 
+		res.end(html);
+  }
+
+
+  else{res.end('no encontrado')}
+
+}).listen(1337, '127.0.0.1');
