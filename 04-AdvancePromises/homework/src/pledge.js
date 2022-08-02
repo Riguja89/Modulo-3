@@ -21,6 +21,7 @@ function $Promise(executor){
                 if(typeof e.successCb=='function') e.successCb(this._value)
                 if(typeof e.errorCb=='function') e.errorCb(this._value)
         });
+        this._handlerGroups.splice(0, this._handlerGroups.length);// borra el array de handles despues de usarlos
         }
 
        }
@@ -30,6 +31,15 @@ function $Promise(executor){
         if(this._state=='pending'){
         this._value=rason
         this._state='rejected';
+
+        if(this._handlerGroups.length!=0){
+            this._handlerGroups.forEach((e)=>{ 
+            if(typeof e.successCb=='function') e.successCb(this._value)
+            if(typeof e.errorCb=='function') e.errorCb(this._value)
+    });
+        this._handlerGroups.splice(0, this._handlerGroups.length); // borra el array de handles despues de usarlos
+    }
+
         }
         
     };
@@ -50,22 +60,26 @@ function $Promise(executor){
         if(typeof e1 != 'function') e1=null;
         this._handlerGroups.push({successCb: s1,errorCb: e1})
             
-        this._callHandlers(s1);
+        this._callHandlers(s1,e1);
     };
 
    
 
-    this._callHandlers=function(handler){
+    this._callHandlers=function(s,e){
 
         if(this._state=='fulfilled'){
-        //     //this._callHandlers(s1);
-
-        if(typeof handler == 'function'){
-            handler(this._value)
-            //this._handlerGroups.shift()
+        if(typeof s == 'function'){
+            s(this._value)
         }   
-     }  
-     //aca posiblemete haya que hacer algo cunado este en modo pending 
+     }else if(this._state=='rejected'){  
+     if(typeof e == 'function'){
+        e(this._value)
+    } 
+    }
+    }
+
+    this.catch = function(f){
+        this.then(null,f)
     }
    
 }
