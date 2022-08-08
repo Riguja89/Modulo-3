@@ -43,7 +43,7 @@ describe('Test de APIS', () => {
   });
 
   describe('POST /sumArray', () => {
-    it('responds with 200', () => agent.get('/test').expect(200));
+    it('responds with 200', () => agent.post('/sumArray').expect(200).send({array: [], num:null}));
     it('Debería devolver true si hay dos mumero con la posible suma ', () =>
       agent.post('/sumArray')
         .send({array: [2,5,7,10,11,15,20], num: 13})
@@ -59,7 +59,7 @@ describe('Test de APIS', () => {
   });
 
   describe('POST /numString', () => {
-    it('responds with 200', () => agent.get('/test').expect(200));
+    it('responds with 200', () => agent.post('/numString').expect(200).send({string: 'hola'}));
     it('Debería devolver con 4 el string `hola`', () =>
       agent.post('/numString')
         .send({string: 'hola',})
@@ -79,7 +79,7 @@ describe('Test de APIS', () => {
   });
 
         describe('POST /pluck', () => {
-          it('responds with 200', () => agent.get('/test').expect(200));
+          it('responds with 200', () => agent.post('/pluck').expect(200).send({array:[{color: 'azul', tamanio: 'grande', forma: 'cuadrado'}], propiedad: 'color'}));
           it('Responder con al funcionalidad del pluck.', () =>
             agent.post('/pluck')
               .send({array: [{color: 'azul', tamanio: 'grande', forma: 'cuadrado'},
